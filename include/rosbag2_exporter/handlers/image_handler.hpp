@@ -117,10 +117,10 @@ public:
     }
 
     // Create the full file path
-    std::string filepath = output_dir_ + "/" + sanitized_topic + "/" + timestamp + extension;
+    std::string filepath = output_dir_ + "/" + timestamp + extension;
 
     // Ensure the directory exists, create if necessary
-    std::filesystem::path dir_path = output_dir_ + "/" + sanitized_topic;
+    std::filesystem::path dir_path = output_dir_ + "/" ;
     if (!std::filesystem::exists(dir_path)) {
       RCLCPP_INFO(logger_, "Creating directory: %s", dir_path.c_str());
       std::filesystem::create_directories(dir_path);
@@ -161,10 +161,10 @@ private:
     }
 
     // Create the full file path
-    std::string filepath = output_dir_ + "/" + sanitized_topic + "/" + timestamp_str + extension;
+    std::string filepath = output_dir_ + "/" + timestamp_str + extension;
 
     // Ensure the directory exists, create if necessary
-    std::filesystem::path dir_path = output_dir_ + "/" + sanitized_topic;
+    std::filesystem::path dir_path = output_dir_;
     if (!std::filesystem::exists(dir_path)) {
       RCLCPP_INFO(logger_, "Creating directory: %s", dir_path.c_str());
       std::filesystem::create_directories(dir_path);
