@@ -67,6 +67,9 @@ public:
       if (encoding_ == "rgb8") {
           // Convert from RGB to BGR for saving with OpenCV (OpenCV uses BGR)
           cv::cvtColor(cv_ptr->image, cv_ptr->image, cv::COLOR_RGB2BGR);
+      } else if (encoding_ == "bayer_rggb8") {
+          // Convert from RGB to BGR for saving with OpenCV (OpenCV uses BGR)
+          cv::cvtColor(cv_ptr->image, cv_ptr->image,  cv::COLOR_BayerBG2BGR);
       } else if (encoding_ == "bgr8") {
           // No conversion needed, OpenCV already uses BGR format
           RCLCPP_INFO(logger_, "Image is already in 'bgr8', no conversion applied.");
