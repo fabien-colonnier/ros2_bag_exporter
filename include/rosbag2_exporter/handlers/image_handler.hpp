@@ -41,6 +41,23 @@ public:
                      const std::string & topic,
                      size_t index) override
   {
+      //check if end of topic name == "compressed"
+      std::string end_s = topic.substr(topic.length()-10,10);
+      if(end_s.compare("compressed") == 0) {
+        process_compressed_message(serialized_msg,
+                                  topic,
+                                  index);
+      } else {
+        process_raw_message(serialized_msg,
+                            topic,
+                            index);
+      }
+  }
+
+  void process_raw_message(const rclcpp::SerializedMessage & serialized_msg,
+                     const std::string & topic,
+                     size_t index)
+  {
       // Deserialize the incoming uncompressed image message
       sensor_msgs::msg::Image img;
       rclcpp::Serialization<sensor_msgs::msg::Image> serializer;
@@ -107,7 +124,7 @@ public:
 
     // Create a timestamped filename and save compressed image directly
     std::stringstream ss_timestamp;
-    ss_timestamp << compressed_img.header.stamp.sec << "-"
+    ss_timestamp << compressed_img.header.stamp.sec
                  << std::setw(9) << std::setfill('0') << compressed_img.header.stamp.nanosec;
     std::string timestamp = ss_timestamp.str();
 
@@ -147,7 +164,7 @@ private:
   {
     // Create a timestamped filename
     std::stringstream ss_timestamp;
-    ss_timestamp << timestamp.sec << "-"
+    ss_timestamp << timestamp.sec
                  << std::setw(9) << std::setfill('0') << timestamp.nanosec;
     std::string timestamp_str = ss_timestamp.str();
 
