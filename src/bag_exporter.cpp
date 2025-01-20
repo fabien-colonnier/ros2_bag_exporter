@@ -94,7 +94,7 @@ void BagExporter::setup_handlers()
     }
 
     // Create directory for each topic
-    std::string topic_dir = output_dir_ + "/" + sanitized_topic.substr(1); // Remove leading '/'
+    std::string topic_dir = output_dir_ + sanitized_topic.substr(1); // Remove leading '/'
     std::filesystem::create_directories(topic_dir);
 
     // Initialize handler based on message type

@@ -47,7 +47,7 @@ public:
             << "orientation_x,orientation_y,orientation_z,orientation_w," << std::endl;
   }
 
-  // Constructor to accept logger
+  // Destructor to close the logger
   ~IMUHandler()
   {
     outfile_.close();
