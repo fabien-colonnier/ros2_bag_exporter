@@ -12,9 +12,6 @@ namespace rosbag2_exporter
 BagExporter::BagExporter(const rclcpp::NodeOptions & options)
 : Node("rosbag2_exporter", options)
 {
-  // Declare and get the config_file parameter (relative to package share)
-  std::string config_file_param = this->declare_parameter<std::string>("config_file", "exporter_config.yaml");
-  
   // Find the package share directory
   std::string package_share_directory;
   try {
@@ -24,10 +21,13 @@ BagExporter::BagExporter(const rclcpp::NodeOptions & options)
       rclcpp::shutdown();
       return;
   }
-    
-  // Construct the absolute path to the config file
-  std::string config_file = package_share_directory + "/" + config_file_param;
-  
+
+  // Declare and get the config_file parameter (absolute path)
+  std::string config_file_param = this->declare_parameter<std::string>("config_file", package_share_directory + "/exporter_config.yaml");
+
+  // Get parameter if it exists
+  std::string config_file = this->get_parameter("config_file").as_string();
+
   // Load configuration
   load_configuration(config_file);
 
