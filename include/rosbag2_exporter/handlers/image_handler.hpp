@@ -54,7 +54,7 @@ public:
     }
 
     // Write first line
-    csv_outfile_ << "timestamp [ns],"
+    csv_outfile_ << "#timestamp [ns],"
             << "filename" << std::endl;
   }
 
@@ -149,7 +149,7 @@ public:
   {
       // Write csv data (timestamp, filename)
       csv_outfile_ << timestamp << ","
-            << timestamp << extension << ","
+            << timestamp << extension
             << std::endl;
   }
 

@@ -41,10 +41,10 @@ public:
     }
 
     // Write first line
-    outfile_ << "timestamp [ns],"
+    outfile_ << "#timestamp [ns],"
             << "angular_velocity_x [rad s^-1],angular_velocity_y [rad s^-1],angular_velocity_z [rad s^-1],"
             << "linear_acceleration_x [m s^-2],linear_acceleration_y [m s^-2],linear_acceleration_z [m s^-2],"
-            << "orientation_x,orientation_y,orientation_z,orientation_w," << std::endl;
+            << std::endl;  // << "orientation_x,orientation_y,orientation_z,orientation_w," << std::endl;
   }
 
   // Destructor to close the logger
@@ -71,9 +71,11 @@ public:
     // Write IMU data (angular velocity, linear acceleration, orientation)
     outfile_ << timestamp << ","
             << imu_data.angular_velocity.x << "," << imu_data.angular_velocity.y << "," << imu_data.angular_velocity.z << ","
-            << imu_data.linear_acceleration.x << "," << imu_data.linear_acceleration.y << "," << imu_data.linear_acceleration.z << ","
-            << imu_data.orientation.x << "," << imu_data.orientation.y << "," << imu_data.orientation.z << "," << imu_data.orientation.w
+            << imu_data.linear_acceleration.x << "," << imu_data.linear_acceleration.y << "," << imu_data.linear_acceleration.z
             << std::endl;
+            // << imu_data.linear_acceleration.x << "," << imu_data.linear_acceleration.y << "," << imu_data.linear_acceleration.z << ","
+            // << imu_data.orientation.x << "," << imu_data.orientation.y << "," << imu_data.orientation.z << "," << imu_data.orientation.w
+            // << std::endl;
 
     RCLCPP_INFO(logger_, "Successfully wrote IMU data, timestamp = %s ns", timestamp.c_str());
   }
