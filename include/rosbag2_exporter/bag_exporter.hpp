@@ -72,6 +72,7 @@ private:
   std::string bag_path_;
   std::string output_dir_;
   std::string storage_id_;
+  rcutils_time_point_value_t start_time_;
   std::vector<TopicConfig> topics_;
   std::map<std::string, Handler> handlers_;
 };

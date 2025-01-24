@@ -48,6 +48,15 @@ void BagExporter::load_configuration(const std::string & config_file)
     output_dir_ = config["output_dir"].as<std::string>();
     storage_id_ = config["storage_id"].as<std::string>();
 
+    if (config["start_time"]) {
+      double start_time_temp = 0.0;
+      start_time_temp = config["start_time"].as<double>();
+      start_time_ = rcutils_time_point_value_t(start_time_temp*1.0e9);
+    } else {
+      start_time_ = rcutils_time_point_value_t(0);
+    }
+    RCLCPP_INFO(this->get_logger(), "start time = %ld ns", start_time_);
+
     for (const auto & topic : config["topics"]) {
       TopicConfig tc;
       tc.name = topic["name"].as<std::string>();
@@ -167,7 +176,7 @@ void BagExporter::export_bag()
     std::string topic = serialized_msg->topic_name;
 
     auto handler_it = handlers_.find(topic);
-    if (handler_it != handlers_.end() && handler_it->second.handler) {
+    if (handler_it != handlers_.end() && handler_it->second.handler && serialized_msg->time_stamp > start_time_) {
       size_t current_index = handler_it->second.current_index;
 
       // Find the sample interval for the topic
