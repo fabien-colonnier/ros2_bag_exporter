@@ -161,6 +161,24 @@ cd /home/user/rosbags/exported_data
 ls
 ```
 
+## Scripts to convert bag to euroc format
+Copy the files in your workspace as it is expected to run from there
+```bash
+cd ~/ros2_ws/
+cp ./src/ros2_bag_exporter/scripts/* ./
+```
+
+Make the script executable
+```bash
+chmod +x convert_bag_to_euroc_format.sh
+```
+
+Run the script
+```bash
+./convert_bag_to_euroc_format.sh --path2bag=/path/to/bag --bagname=bagname
+```
+
+
 ## Troubleshooting
 ### 1. Package Not Found
 **Error:**
