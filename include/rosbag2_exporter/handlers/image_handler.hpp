@@ -163,30 +163,41 @@ public:
     rclcpp::Serialization<sensor_msgs::msg::CompressedImage> serializer;
     serializer.deserialize_message(&serialized_msg, &compressed_img);
 
-    // Determine file extension based on the compressed image format
-    std::string extension;
-    if (compressed_img.format.find("jpeg") != std::string::npos || compressed_img.format.find("jpg") != std::string::npos) {
-      extension = ".jpg";
-    } else if (compressed_img.format.find("png") != std::string::npos) {
-      extension = ".png";
-    } else {
-      RCLCPP_WARN(logger_, "Unknown compressed image format: %s. Defaulting to '.jpg'", compressed_img.format.c_str());
-      extension = ".jpg";  // Default to JPEG if unknown
-    }
-
+    // Get timestamp
     std::string timestamp_str = get_timestamp_as_str(compressed_img.header.stamp.sec, compressed_img.header.stamp.nanosec);
 
-    // Create the full file path
-    std::string filepath = output_dir_ + "/" + timestamp_str + extension;
+    
 
-    // Save the compressed image data directly to file
-    std::ofstream outfile(filepath, std::ios::binary);
-    if (!outfile.is_open()) {
-      RCLCPP_ERROR(logger_, "Failed to open file to write compressed image: %s", filepath.c_str());
-      return;
+    // default decompress image before saving
+    bool print_decompressed = true;  //TODO create as config param
+    std::string extension = ".png";  // default extension
+    std::string filepath = output_dir_ + "/" + timestamp_str + extension;  // Create the full file path to write to
+    if(print_decompressed) {
+      // decompressed image before saving (inspired from https://github.com/ros-perception/image_transport_plugins/blob/humble/compressed_image_transport/src/compressed_subscriber.cpp)
+      cv::Mat image = cv::imdecode(cv::Mat(compressed_img.data), cv::IMREAD_UNCHANGED);  //TODO create flag to decode
+      cv::imwrite(filepath, image);
+    } else{
+      // Determine file extension based on the compressed image format and save as is
+      if (compressed_img.format.find("jpeg") != std::string::npos || compressed_img.format.find("jpg") != std::string::npos) {
+        extension = ".jpg";
+      } else if (compressed_img.format.find("png") != std::string::npos) {
+        extension = ".png";
+      } else {
+        RCLCPP_WARN(logger_, "Unknown compressed image format: %s. Defaulting to '.jpg'", compressed_img.format.c_str());
+        extension = ".jpg";  // Default to JPEG if unknown
+      }
+
+      // Save the compressed image data directly to file
+      std::ofstream outfile(filepath, std::ios::binary);
+      if (!outfile.is_open()) {
+        RCLCPP_ERROR(logger_, "Failed to open file to write compressed image: %s", filepath.c_str());
+        return;
+      }
+      // outfile.write(reinterpret_cast<const char*>(compressed_img.data.data()), compressed_img.data.size());
+      // outfile.close();
     }
-    // outfile.write(reinterpret_cast<const char*>(compressed_img.data.data()), compressed_img.data.size());
-    // outfile.close();
+
+    
 
     update_csv(timestamp_str, extension);
 
