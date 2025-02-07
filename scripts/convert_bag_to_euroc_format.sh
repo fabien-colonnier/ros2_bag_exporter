@@ -79,7 +79,7 @@ sed -i "s@<imu_topic>@$imu_topic@g" convert_config.yaml
 source /opt/ros/humble/setup.bash;
 source ./install/setup.bash;
 echo "current ros2 workspace is: $PWD"
-# ros2 run ros2_bag_exporter bag_exporter --ros-args -p config_file:=$PWD/convert_config.yaml 
+ros2 run ros2_bag_exporter bag_exporter --ros-args -p config_file:=$PWD/convert_config.yaml
 
 # modify the path to files in the folder
 # for cam_0 data
