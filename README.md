@@ -17,6 +17,7 @@ ROS2 Bag Exporter is a versatile ROS 2 (Humble Hawksbill) c++ package designed t
 - **DepthImage**: Export depth images with appropriate encoding.
 - **LaserScan**: Export laser scan data.
 - **IMU**: Export IMU data for inertial measurement analysis.
+- **Odom**: Export Odom data for Odometry measurement (can be wheel odom or external measurement).
 - **GPS**: Export GPS coordinates and data.
 
 #### Configurable Export Settings:
@@ -93,6 +94,9 @@ topics:
   - name: "/imu_topic"
     type: "IMU"
     sample_interval: 100  # Write one sample every 100 messages
+  - name: "/Odom_topic"
+    type: "Odom"
+    sample_interval: 1  # Write one sample for every message
   - name: "/gps_topic"
     type: "GPS"
     sample_interval: 100  # Write one sample every 100 messages

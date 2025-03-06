@@ -74,6 +74,8 @@ void BagExporter::load_configuration(const std::string & config_file)
         tc.encoding = topic["encoding"] ? topic["encoding"].as<std::string>() : "16UC1"; // default encoding
       } else if (type == "IMU") {
         tc.type = MessageType::IMU;
+      } else if (type == "Odom") {
+        tc.type = MessageType::Odom;
       } else if (type == "GPS") {
         tc.type = MessageType::GPS;
       } else if (type == "LaserScan") {
@@ -121,6 +123,9 @@ void BagExporter::setup_handlers()
       handlers_[topic.name] = Handler{handler, 0};
     } else if (topic.type == MessageType::IMU) {
       auto handler = std::make_shared<IMUHandler>(topic_dir, this->get_logger());
+      handlers_[topic.name] = Handler{handler, 0};
+    } else if (topic.type == MessageType::Odom) {
+      auto handler = std::make_shared<OdomHandler>(topic_dir, this->get_logger());
       handlers_[topic.name] = Handler{handler, 0};
     } else if (topic.type == MessageType::GPS) {
       auto handler = std::make_shared<GPSHandler>(topic_dir, this->get_logger());

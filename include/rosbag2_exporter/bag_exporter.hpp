@@ -13,6 +13,7 @@
 #include "rosbag2_exporter/handlers/ir_image_handler.hpp"
 #include "rosbag2_exporter/handlers/laser_scan_handler.hpp"
 #include "rosbag2_exporter/handlers/imu_handler.hpp"
+#include "rosbag2_exporter/handlers/odom_handler.hpp"
 #include "rosbag2_exporter/handlers/gps_handler.hpp"
 
 #include <yaml-cpp/yaml.h>
@@ -41,6 +42,7 @@ enum class MessageType
   DepthImage,
   IRImage,
   IMU,
+  Odom,
   GPS,
   Unknown
 };

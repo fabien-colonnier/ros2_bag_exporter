@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # test command
-#  ./convert_bag_to_euroc_format.sh --path2bag=/path/to/bag --bagname=test_0
+#  ./convert_bag_to_euroc_format.sh --path2bag=/home/fabien/VIO_work/Opensource_project/bag_stereo/Bag_OVA_30Hz --bagname=test_ova_0
 
 # Argument validation check
 if [ "$#" -lt 2 ]; then
@@ -15,7 +15,7 @@ fi
 
 # default val declaration
 outfld="empty"
-cam_sample_interval=3
+cam_sample_interval=1
 
 # Loop through all arguments
 for arg in "$@"; do
@@ -55,14 +55,16 @@ echo "output folder: $outfld"
 echo "1 camera message will be written every $cam_sample_interval messages"
 
 # declare the ros topic to be converted (TODO maybe creat arguments for this)
-cam0_topic="/<cam_0/image>" # Expect to start with "/"
-cam1_topic="/<cam_1/image>"
-imu_topic="/imu/imu"
+cam0_topic="/camera/infra1/image_rect_raw"
+cam1_topic="/camera/infra2/image_rect_raw"
+imu_topic="/camera/imu"
+odom_topic="/vicon/realsense_mount_F/realsense_mount_F_odom"
 
 echo ""
 echo "The expected cam0 topic is $cam0_topic"
 echo "The expected cam1 topic is $cam1_topic"
 echo "The expected IMU topic is $imu_topic"
+echo "The expected Odom topic is $odom_topic"
 
 # create the yaml file convert_config.yaml from convert_config_template.yaml
 cp convert_config_template.yaml convert_config.yaml
@@ -74,15 +76,13 @@ sed -i "s@<1>@$cam_sample_interval@g" convert_config.yaml
 sed -i "s@<cam0_topic>@$cam0_topic@g" convert_config.yaml
 sed -i "s@<cam1_topic>@$cam1_topic@g" convert_config.yaml
 sed -i "s@<imu_topic>@$imu_topic@g" convert_config.yaml
+sed -i "s@<odom_topic>@$odom_topic@g" convert_config.yaml
 
 # run the converter node, assuming the workspace is built
 source /opt/ros/humble/setup.bash;
 source ./install/setup.bash;
 echo "current ros2 workspace is: $PWD"
-ros2 run ros2_bag_exporter bag_exporter --ros-args -p config_file:=$PWD/convert_config.yaml
-
-# modify the path to files in the folder
-# for cam_0 data
+ros2 run ros2_bag_exporter bag_exporter --ros-args -p config_file:=$PWD/convert_config.yaml 
 
 # get path to data.csv
 csv_path="${cam0_topic}"
@@ -114,4 +114,14 @@ if [ -d "${outfld}${imu_topic}/" ]; then
   mv ${outfld}${imu_topic}/ ${outfld}/mav0/imu0
 fi
 
-rm -r ${outfld}/vision
+# get namespace
+ns="${cam0_topic}"
+count=1
+while [ "${ns:$count:1}" != "/" ] && [ $count -lt 20 ]; do
+# while [ "${ns:$count:1}" != "/" ]; do
+   count=$(($count + 1))
+done
+
+# erase the folder with namespace
+ns="${ns:0:($count)}"
+rm -r ${outfld}${ns}
