@@ -76,6 +76,8 @@ void BagExporter::load_configuration(const std::string & config_file)
         tc.type = MessageType::IMU;
       } else if (type == "Odom") {
         tc.type = MessageType::Odom;
+      } else if (type == "PointStamped") {
+        tc.type = MessageType::PointStamped;
       } else if (type == "GPS") {
         tc.type = MessageType::GPS;
       } else if (type == "LaserScan") {
@@ -126,6 +128,9 @@ void BagExporter::setup_handlers()
       handlers_[topic.name] = Handler{handler, 0};
     } else if (topic.type == MessageType::Odom) {
       auto handler = std::make_shared<OdomHandler>(topic_dir, this->get_logger());
+      handlers_[topic.name] = Handler{handler, 0};
+    } else if (topic.type == MessageType::PointStamped) {
+      auto handler = std::make_shared<PointStampedHandler>(topic_dir, this->get_logger());
       handlers_[topic.name] = Handler{handler, 0};
     } else if (topic.type == MessageType::GPS) {
       auto handler = std::make_shared<GPSHandler>(topic_dir, this->get_logger());

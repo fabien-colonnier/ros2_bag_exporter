@@ -15,6 +15,7 @@ find_package(rclcpp REQUIRED)
 find_package(rosbag2_cpp REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED) 
 find_package(pcl_conversions REQUIRED)
 find_package(pcl_ros REQUIRED)
@@ -45,6 +46,7 @@ ament_target_dependencies(bag_exporter
   rclcpp
   rosbag2_cpp
   sensor_msgs
+  geometry_msgs
   nav_msgs
   std_msgs
   pcl_conversions
