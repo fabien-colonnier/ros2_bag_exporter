@@ -78,6 +78,8 @@ void BagExporter::load_configuration(const std::string & config_file)
         tc.type = MessageType::Odom;
       } else if (type == "PointStamped") {
         tc.type = MessageType::PointStamped;
+      } else if (type == "PoseStamped") {
+        tc.type = MessageType::PointStamped;
       } else if (type == "GPS") {
         tc.type = MessageType::GPS;
       } else if (type == "LaserScan") {

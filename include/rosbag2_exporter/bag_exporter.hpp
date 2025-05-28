@@ -44,6 +44,7 @@ enum class MessageType
   IRImage,
   IMU,
   Odom,
+  PoseStamped,
   PointStamped,
   GPS,
   Unknown
